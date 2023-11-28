@@ -1,13 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
+class User(AbstractUser):
     UserID = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)
-    role = models.CharField(max_length=20, choices=[('Employer', 'Работодатель'), ('JobSeeker', 'Соискатель'), ('Admin', 'Admin')])
-
+    # name = models.CharField(max_length=100)
+    # surname = models.CharField(max_length=100)
+    role = models.CharField(max_length=20, choices=[('Employer', 'Работодатель'), ('JobSeeker', 'Соискатель'), ('Admin', 'Администратор')])
 
 class Employer(models.Model):
     EmployerID = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
