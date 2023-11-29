@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <style>
+        /* Стили для всплывающего окна предупреждения */
+        #warning-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+    </style>
+  <h2>Add Resume</h2>
+
+
+  <form method="post" action="{% url 'add_resume' %}">
+    {% csrf_token %}
+
+    <label for="profession">profession:</label>
+    <input type="text" id="profession" name="profession" required>
+    <br>
+
+    <label for="skills">skills:</label>
+    <textarea id="skills" name="skills" rows="4" required></textarea>
+    <br>
+
+    <label for="experience">Requirements:</label>
+    <textarea id="experience" name="experience" rows="4" required></textarea>
+    <br>
+
+
+    <button type="submit" onclick="return validateForm()">Add Resume</button>
+  </form>
+
+  {% if warning %}
+<div id="warning-popup">
+    <p>User has no employer. Please contact support.</p>
+</div>
+{% endif %}
+{% endblock %}

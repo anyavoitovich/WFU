@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+{% block title %}User Registration{% endblock title %}
+
+{% block content %}
+<head>
+    <title>{{ vacancy.title }}</title>
+</head>
+<body>
+    <h1>{{ vacancy.title }}</h1>
+    <p>{{ vacancy.description }}</p>
+    <p>Requirements: {{ vacancy.requirements }}</p>
+    <p>Salary: ${{ vacancy.experience }}</p>
+</body>
+{% endblock content %}

@@ -1,0 +1,119 @@
+
+
+{% extends "index.html" %}
+{% block title %}User Registration{% endblock title %}
+{% block header %}User Registration{% endblock header %}
+
+{% block content %}
+
+<head>
+    <!-- Add your existing head content here -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .container::before {
+            content: "";
+            display: block;
+            height: 150px; /* Adjust the height as needed */
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+    </style>
+</head>
+
+
+<div class="container">
+    <h2>User Registration</h2>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+
+        <label for="id_role">Role:</label>
+        <select name="role" id="id_role">
+            <option value="Employer">Employer</option>
+            <option value="JobSeeker">JobSeeker</option>
+        </select>
+
+        <div id="employer-form" style="display: none;">
+            <label for="id_company_name">Company Name:</label>
+            <input type="text" name="company_name" id="id_company_name">
+            <label for="id_company_description">Company Description:</label>
+            <textarea name="company_description" id="id_company_description"></textarea>
+        </div>
+
+        <div id="jobseeker-form" style="display: none;">
+            <label for="id_birthdate">Birthdate:</label>
+            <input type="date" name="birthdate" id="id_birthdate">
+            <label for="id_education">Education:</label>
+            <textarea name="education" id="id_education"></textarea>
+            <label for="id_experience">Experience:</label>
+            <textarea name="experience" id="id_experience"></textarea>
+        </div>
+
+        <label for="id_first_name">First Name:</label>
+        <input type="text" name="first_name" id="id_first_name">
+        <label for="id_last_name">Last Name:</label>
+        <input type="text" name="last_name" id="id_last_name">
+        <label for="id_email">Email:</label>
+        <input type="email" name="email" id="id_email">
+        <label for="id_password1">Password:</label>
+        <input type="password" name="password1" id="id_password1">
+        <label for="id_password2">Confirm Password:</label>
+        <input type="password" name="password2" id="id_password2">
+
+        <script>
+            const roleInput = document.getElementById('id_role');
+            const employerForm = document.getElementById('employer-form');
+            const jobSeekerForm = document.getElementById('jobseeker-form');
+
+            roleInput.addEventListener('change', () => {
+                employerForm.style.display = roleInput.value === 'Employer' ? 'block' : 'none';
+                jobSeekerForm.style.display = roleInput.value === 'JobSeeker' ? 'block' : 'none';
+            });
+        </script>
+
+        <input type="submit" value="Register">
+    </form>
+</div>
+
+{% endblock content %}

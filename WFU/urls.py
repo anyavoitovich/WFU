@@ -15,17 +15,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.contrib.auth.views import LoginView
+from django.urls import path, include
+from django.contrib.auth import views as auth_views
+
+
 from riddles import views
 from django.views.generic import TemplateView
-
-from riddles.views import registerEmployer, login, employerAccount, jobSeekerAccount
+from django.contrib.auth.views import LogoutView
+from riddles.views import login, employerAccount, jobSeekerAccount, add_vacancy, register, add_resume, logout, \
+    vacancy_detail, resume_detail
 
 urlpatterns = [
-    path("", views.index),
+    path("", views.index, name='index'),
     path("admin/", admin.site.urls),
     path('login/', login, name='login'),
-    path('registerEmployer/', registerEmployer, name='registerEmployer'),
+    path('register/', register, name='register'),
     path('employerAccount/', employerAccount, name='employerAccount'),
-    path('jobSeekerAccount/', jobSeekerAccount, name='jobSeekerAccount')
+    path('jobSeekerAccount/', jobSeekerAccount, name='jobSeekerAccount'),
+    path('add_vacancy/', add_vacancy, name='add_vacancy'),
+    path('add_resume/', add_resume, name='add_resume'),
+    path('logout/', logout, name='logout'),
+    path('vacancy/<int:vacancy_id>/', vacancy_detail, name='vacancy_detail'),
+    path('resume/<int:resume_id>/', resume_detail, name='resume_detail')
 ]

@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+
+{% block title %}Resume Details{% endblock title %}
+
+{% block content %}
+  <h1>Resume Details</h1>
+  <p>Profession: {{ resume.profession }}</p>
+  <p>Skills: {{ resume.skills }}</p>
+  <p>Experience: ${{ resume.experience }}</p>
+{% endblock content %}

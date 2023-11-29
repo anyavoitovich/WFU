@@ -3,11 +3,50 @@
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}Default title{% endblock title %}</title>
+    <style>
+        /* Добавим стили для жёлтого навбара */
+        nav {
+            background-color: #FFD700;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div><a href="/">Главная</a> | <a href="/login">вход</a></div>
+    <nav>
+    <div>
+        <a href="/">Главная</a> |
+        {% if current_user.is_authenticated %}
+            <a href="{% if current_user.role == 'Employer' %}/employerAccount{% else %}/jobSeekerAccount{% endif %}">Личный кабинет</a> |
+            <a href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+            <a href="{% url 'login' %}">Вход</a>
+        {% endif %}
+    </div>
+</nav>
+{% csrf_token %}
     <h1>{% block header %}{% endblock header %}</h1>
-    <div>{% block content%}{% endblock content %}</div>
+    <div>{% block content %}
+        {% if current_user.role == 'JobSeeker' %}
+        <h2>Vacancies</h2>
+
+        <ul>
+            {% for vacancy in vacancies %}
+               <li><a href="{% url 'vacancy_detail' vacancy.VacancyID %}">{{ vacancy.title }}</a></li>
+            {% endfor %}
+        </ul>
+
+        {% elif current_user.role == 'Employer' %}
+            <h2>Resumes</h2>
+            <ul>
+                {% for resume in resumes %}
+                   <li><a href="{% url 'resume_detail' resume.ResumeID %}">{{ resume.profession }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endblock content %}
+    </div>
+
     <div>MyCorp. 2022. All rights reserved.</div>
 </body>
 </html>
+
