@@ -3,8 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     UserID = models.AutoField(primary_key=True)
-    # name = models.CharField(max_length=100)
-    # surname = models.CharField(max_length=100)
     role = models.CharField(max_length=20, choices=[('Employer', 'Работодатель'), ('JobSeeker', 'Соискатель'), ('Admin', 'Администратор')])
 
 class Employer(models.Model):

@@ -19,14 +19,13 @@ from django.urls import path
 from riddles import views
 from django.views.generic import TemplateView
 
-from riddles.views import registerEmployer, login, adminAccount, employerAccount, jobSeekerAccount
+from riddles.views import registerEmployer, login, employerAccount, jobSeekerAccount
 
 urlpatterns = [
     path("", views.index),
     path("admin/", admin.site.urls),
     path('login/', login, name='login'),
     path('registerEmployer/', registerEmployer, name='registerEmployer'),
-    path('adminAccount/', adminAccount, name='adminAccount'),
     path('employerAccount/', employerAccount, name='employerAccount'),
     path('jobSeekerAccount/', jobSeekerAccount, name='jobSeekerAccount')
 ]
