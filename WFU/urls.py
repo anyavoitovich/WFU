@@ -24,7 +24,7 @@ from riddles import views
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
 from riddles.views import login, employerAccount, jobSeekerAccount, add_vacancy, register, add_resume, logout, \
-    vacancy_detail, resume_detail
+    vacancy_detail, resume_detail, chat_view, send_message
 
 urlpatterns = [
     path("", views.index, name='index'),
@@ -37,5 +37,7 @@ urlpatterns = [
     path('add_resume/', add_resume, name='add_resume'),
     path('logout/', logout, name='logout'),
     path('vacancy/<int:vacancy_id>/', vacancy_detail, name='vacancy_detail'),
-    path('resume/<int:resume_id>/', resume_detail, name='resume_detail')
+    path('resume/<int:resume_id>/', resume_detail, name='resume_detail'),
+    path('chat/<int:other_user_id>/', chat_view, name='chat_view'),
+    path('send_message/<int:other_user_id>/', views.send_message, name='send_message'),
 ]

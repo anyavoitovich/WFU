@@ -6,5 +6,11 @@
   <h1>Resume Details</h1>
   <p>Profession: {{ resume.profession }}</p>
   <p>Skills: {{ resume.skills }}</p>
-  <p>Experience: ${{ resume.experience }}</p>
+  <p>Experience: {{ resume.experience }}</p>
+  <p>birthdate: {{ job_seeker.birthdate }}</p>
+  <p>birthdate: {{ job_seeker.education }}</p>
+  <p>experience: {{ job_seeker.education }}</p>
+  <p>name: {{ job_seeker.JobSeekerID.first_name }} {{ job_seeker.JobSeekerID.last_name }}</p>
+  <p>email: {{ job_seeker.JobSeekerID.email }}</p>
+<a href="{% if job_seeker.JobSeekerID.UserID %}{% url 'chat_view' other_user_id=job_seeker.JobSeekerID.UserID %}{% else %}#{% endif %}" onclick="startChat(event, {% if job_seeker.JobSeekerID.UserID %}{{ job_seeker.JobSeekerID.UserID }}{% else %}null{% endif %});">Start Chat</a>
 {% endblock content %}

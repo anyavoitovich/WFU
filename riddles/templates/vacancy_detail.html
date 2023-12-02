@@ -7,8 +7,13 @@
 </head>
 <body>
     <h1>{{ vacancy.title }}</h1>
-    <p>{{ vacancy.description }}</p>
+    <p>description:{{ vacancy.description }}</p>
     <p>Requirements: {{ vacancy.requirements }}</p>
-    <p>Salary: ${{ vacancy.experience }}</p>
-</body>
+    <p>Salary: {{ vacancy.salary }}</p>
+    <p>company name: {{ employer.company_name }}</p>
+    <p>company description: {{ employer.company_description }}</p>
+    <p>name: {{ employer.EmployerID.first_name }} {{ employer.EmployerID.last_name }}</p>
+    <p>email: {{ employer.EmployerID.email }}</p>
+<a href="{% if employer.EmployerID.UserID %}{% url 'chat_view' other_user_id=employer.EmployerID.UserID %}{% else %}#{% endif %}" onclick="startChat(event, {% if employer.EmployerID.UserID %}{{ employer.EmployerID.UserID }}{% else %}null{% endif %});">Start Chat</a>
+
 {% endblock content %}

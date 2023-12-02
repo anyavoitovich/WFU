@@ -39,8 +39,9 @@
             <h2>Resumes</h2>
             <ul>
                 {% for resume in resumes %}
-                   <li><a href="{% url 'resume_detail' resume.ResumeID %}">{{ resume.profession }}</a></li>
+                   <li><a href="{% url 'resume_detail' resume.ResumeID%}">{{ resume.profession }}</a></li>
                 {% endfor %}
+
             </ul>
         {% endif %}
         {% endblock content %}

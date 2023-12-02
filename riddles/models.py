@@ -30,6 +30,11 @@ class User(AbstractUser):
         self.username = self.email
         super().save(*args, **kwargs)
 
+    def is_employer(self):
+        return self.role == 'Employer'
+
+    def is_jobseeker(self):
+        return self.role == 'JobSeeker'
 class Employer(models.Model):
     EmployerID = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     company_name = models.CharField(max_length=100)
@@ -97,3 +102,6 @@ class Education(models.Model):
 class JobCategory(models.Model):
     CategoryID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
+
+
+
