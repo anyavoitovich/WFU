@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+{% block title %}Заявки на вакансии{% endblock title %}
+{% block header %}Заявки на вакансии{% endblock header %}
+
+{% block content %}
+  <h2>Заявки на вакансии</h2>
+  <ul>
+    {% for application in applications %}
+      <li>
+        <strong>{{ application.sender.first_name }} {{ application.sender.last_name }}</strong>
+        <p>Profession: {{ application.resume.profession }}</p>
+        <p>Status: {{ application.get_status_display }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock content %}

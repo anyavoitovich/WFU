@@ -1,9 +1,9 @@
 from django.views.decorators.http import require_POST
 
-from .models import User, Vacancy, Resume, VacancyApplication, Employer
+from .models import User, Vacancy, Resume,  Employer, VacancyApplication, ResumeApplication
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import login as auth_login, logout as auth_logout
-from .models import User, Employer, JobSeeker, Resume, Message
+from .models import User, Employer, JobSeeker, Resume, Message, Education
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -11,6 +11,7 @@ from .forms import EmployerRegistrationForm, JobSeekerRegistrationForm
 from django.utils import timezone
 from django.urls import reverse
 from django.db.models import Q
+from django.db.models import Count
 from django.views import View
 
 
@@ -21,10 +22,6 @@ def index(request):
     resumes = Resume.objects.all()
     context = {'vacancies': vacancies, 'resumes': resumes, 'jobseekers':jobseekers, 'current_user': request.user}
     return render(request, 'index.html', context)
-
-
-# ...
-
 
 def login(request):
     if request.method == 'POST':
@@ -56,32 +53,6 @@ def logout(request):
     auth_logout(request)
     return redirect('index')
 
-# def registerEmployer(request):
-#     if request.method == 'POST':
-#         first_name = request.POST.get('first_name')
-#         last_name = request.POST.get('last_name')
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-#         password2 = request.POST.get('password2')
-#         role = request.POST.get('role')
-#
-#         if password != password2:
-#             return HttpResponse("Your password and confrom password are not the same!!")
-#         else:
-#             # Создаем пользователя
-#             hashed_password = make_password(password)
-#             user = User.objects.create(
-#                 first_name=first_name,
-#                 last_name=last_name,
-#                 email=email,
-#                 password=hashed_password,
-#                 role=role
-#             )
-#             return redirect('/login')
-#
-#     return render(request, "register.html")
-
-
 def register(request):
     if request.method == 'POST':
         role = request.POST.get('role')
@@ -91,7 +62,7 @@ def register(request):
         elif role == 'JobSeeker':
             form = JobSeekerRegistrationForm(request.POST)
         else:
-            return HttpResponse("Неверная роль")
+            return HttpResponse("Invalid role")
 
         if form.is_valid():
             user = form.save(commit=False)
@@ -104,21 +75,18 @@ def register(request):
                                     company_name=request.POST['company_name'],
                                     company_description=request.POST['company_description'])
                 employer.save()
-
             elif role == 'JobSeeker':
                 jobseeker = JobSeeker(JobSeekerID=user,
-                                      birthdate=request.POST['birthdate'],
-                                      education=request.POST['education'],
-                                      experience=request.POST['experience'])
+                                      birthdate=request.POST['birthdate'])
                 jobseeker.save()
 
             context = {'current_user': user}
-
             return render(request, 'login.html', context)
     else:
         form = EmployerRegistrationForm()
 
     return render(request, 'register.html', {'form': form})
+
 
 @login_required
 def employerAccount(request):
@@ -129,37 +97,6 @@ def employerAccount(request):
 def jobSeekerAccount(request):
     context = {'current_user': request.user}
     return render(request, 'jobSeekerAccount.html', context)
-
-
-# @login_required
-# def add_vacancy(request):
-#     # Проверяем, является ли пользователь работодателем
-#     if request.user.role != 'Employer':
-#         print("Пользователь не является работодателем. Доступ запрещен.")
-#         return HttpResponse("Вы не авторизованы для добавления вакансий.")
-#
-#     if request.method == 'POST':
-#         try:
-#             employer = request.user.employer
-#             print(f"Пользователь: {request.user}, Работодатель: {employer}")
-#
-#             new_vacancy = Vacancy(
-#                 employer=employer,
-#                 title=request.POST['title'],
-#                 description=request.POST['description'],
-#                 requirements=request.POST['requirements'],
-#                 salary=request.POST['salary']
-#             )
-#             new_vacancy.save()
-#
-#             print("Вакансия успешно добавлена.")
-#             return render(request, 'employerAccount.html')
-#         except Employer.DoesNotExist:
-#             print("У пользователя нет объекта работодателя.")
-#             return render(request, 'add_vacancy.html', {'warning': True})
-#
-#     return render(request, 'add_vacancy.html')
-
 
 @login_required
 def add_vacancy(request):
@@ -199,18 +136,22 @@ def add_resume(request):
             profession=request.POST['profession'],
             skills=request.POST['skills'],
             experience=request.POST['experience'],
+
         )
         new_resume.save()
         return render(request, 'jobSeekerAccount.html')
 
     # Возвращаем форму добавления вакансии (GET запрос)
     return render(request, 'add_resume.html', context={'current_user': request.user})
+
+@login_required
 def vacancy_detail(request, vacancy_id):
     # Retrieve the vacancy using the vacancy_id
     vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
     employer = vacancy.employer
     # Pass the vacancy to the template context
-    context = {'vacancy': vacancy,'current_user': request.user, 'employer': employer}
+    applications = VacancyApplication.objects.filter(vacancy=vacancy, sender=request.user)
+    context = {'vacancy': vacancy, 'current_user': request.user, 'employer': employer, 'applications': applications}
 
     return render(request, 'vacancy_detail.html', context)
 
@@ -219,9 +160,12 @@ def vacancy_detail(request, vacancy_id):
 def resume_detail(request, resume_id):
     resume = get_object_or_404(Resume, pk=resume_id)
     job_seeker = resume.job_seeker
-    context = {'resume': resume, 'current_user': request.user, 'job_seeker': job_seeker}
-    return render(request, 'resume_detail.html', context)
+    education = Education.objects.filter(resume=resume).first()
+    applications = ResumeApplication.objects.filter(resume=resume, sender=request.user)
+    context = {'resume': resume, 'current_user': request.user, 'job_seeker': job_seeker, 'education': education,
+               'applications': applications}
 
+    return render(request, 'resume_detail.html', context)
 
 
 @login_required
@@ -282,3 +226,186 @@ def send_message(request, other_user_id):
     # Используйте reverse для создания URL с именем 'chat' и параметром other_user_id
     return redirect(reverse('chat_view', kwargs={'other_user_id': other_user_id}))
 
+@login_required
+def chat_view(request, other_user_id):
+    other_user = get_object_or_404(User, UserID=other_user_id)
+    chat_messages = Message.objects.filter(
+        (Q(sender=request.user, receiver=other_user) | Q(sender=other_user, receiver=request.user)),
+    ).order_by('timestamp')
+
+    context = {'other_user': other_user, 'other_user_id': other_user_id, 'chat_messages': chat_messages}
+    return render(request, 'chat.html', context)
+
+@login_required
+def chat_list(request):
+    # Получите список чатов пользователя и количество непрочитанных сообщений в каждом чате
+    user_chats_sender = Message.objects.filter(
+        sender=request.user
+    ).values('receiver').annotate(num_unread=Count('MessageID', filter=Q(is_read=False)))
+
+    user_chats_receiver = Message.objects.filter(
+        receiver=request.user
+    ).values('sender').annotate(num_unread=Count('MessageID', filter=Q(is_read=False)))
+
+    # Объедините списки чатов по пользовательским идентификаторам
+    user_chats = user_chats_sender.union(user_chats_receiver)
+
+    context = {'user_chats': user_chats}
+    return render(request, 'chat_list.html', context)
+
+
+@login_required
+@require_POST
+def apply_vacancy(request, vacancy_id):
+    vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
+
+    # Проверка, подавал ли пользователь уже заявку
+    existing_application = VacancyApplication.objects.filter(vacancy=vacancy, sender=request.user).first()
+    if existing_application:
+        return HttpResponseBadRequest("Вы уже подавали заявку на эту вакансию.")
+
+    # Создание новой заявки
+    VacancyApplication.objects.create(vacancy=vacancy, sender=request.user, status='Pending')
+
+    return redirect('vacancy_detail', vacancy_id=vacancy_id)
+
+@login_required
+@require_POST
+def apply_resume(request, resume_id):
+    resume = get_object_or_404(Resume, pk=resume_id)
+
+    # Проверка, подавал ли пользователь уже заявку
+    existing_application = ResumeApplication.objects.filter(resume=resume, sender=request.user).first()
+    if existing_application:
+        return HttpResponseBadRequest("Вы уже подавали заявку на это резюме.")
+
+    # Создание новой заявки
+    ResumeApplication.objects.create(resume=resume, sender=request.user, status='Pending')
+
+    return redirect('resume_detail', resume_id=resume_id)
+
+@login_required
+def view_resume(request, resume_id):
+    resume = get_object_or_404(Resume, pk=resume_id)
+    context = {'resume': resume}
+    return render(request, 'view_resume.html', context)
+
+@login_required
+def edit_resume(request, resume_id):
+    resume = get_object_or_404(Resume, pk=resume_id)
+
+    if request.method == 'POST':
+        # Обработка формы редактирования
+        resume.profession = request.POST['profession']
+        resume.skills = request.POST['skills']
+        resume.experience = request.POST['experience']
+        resume.save()
+        return redirect('jobSeekerAccount')
+
+    context = {'resume': resume}
+    return render(request, 'edit_resume.html', context)
+
+@login_required
+def delete_resume(request, resume_id):
+    resume = get_object_or_404(Resume, pk=resume_id)
+
+    if request.method == 'POST':
+        # Обработка удаления
+        resume.delete()
+        return redirect('jobSeekerAccount')
+
+    context = {'resume': resume}
+    return render(request, 'delete_resume.html', context)
+
+@login_required
+def view_vacancy(request, vacancy_id):
+    vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
+    context = {'vacancy': vacancy}
+    return render(request, 'view_vacancy.html', context)
+
+@login_required
+def edit_vacancy(request, vacancy_id):
+    vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
+
+    if request.method == 'POST':
+        # Обработка формы редактирования
+        vacancy.title = request.POST['title']
+        vacancy.description = request.POST['description']
+        vacancy.requirements = request.POST['requirements']
+        vacancy.salary = request.POST['salary']
+        vacancy.save()
+        return redirect('employerAccount')
+
+    context = {'vacancy': vacancy}
+    return render(request, 'edit_vacancy.html', context)
+
+@login_required
+def delete_vacancy(request, vacancy_id):
+    vacancy = get_object_or_404(Vacancy, pk=vacancy_id)
+
+    if request.method == 'POST':
+        # Обработка удаления
+        vacancy.delete()
+        return redirect('employerAccount')
+
+    context = {'vacancy': vacancy}
+    return render(request, 'delete_vacancy.html', context)
+
+
+@login_required
+def jobseeker_applications(request):
+    applications = VacancyApplication.objects.filter(sender=request.user)
+    context = {'applications': applications}
+    return render(request, 'jobseeker_applications.html', context)
+
+@login_required
+def jobseeker_jobs(request):
+    # Get all job applications related to the job seeker
+    job_applications = ResumeApplication.objects.filter(resume__job_seeker=request.user.jobseeker)
+    print(job_applications)  # Добавьте эту строку
+    context = {'job_applications': job_applications}
+    return render(request, 'jobseeker_jobs.html', context)
+
+@login_required
+def employer_applications(request):
+    applications = ResumeApplication.objects.filter(sender=request.user)
+    context = {'applications': applications}
+    return render(request, 'employer_applications.html', context)
+
+@login_required
+def employer_candidates(request):
+    # Получите все заявки, связанные с вакансиями работодателя
+    employer_applications = VacancyApplication.objects.filter(vacancy__employer=request.user.employer)
+
+    # Передайте заявки в шаблон с ключом 'candidates'
+    context = {'candidates': employer_applications}
+    return render(request, 'employer_candidates.html', context)
+
+# Add a new view to handle changing the status of candidates
+@login_required
+@require_POST
+def change_candidate_status(request, candidate_id):
+    candidate = get_object_or_404(VacancyApplication, pk=candidate_id)
+    new_status = request.POST.get('new_status')
+
+    # Validate that the new_status is one of the allowed choices
+    if new_status in ['Accepted', 'Rejected', 'Pending']:
+        candidate.status = new_status
+        candidate.save()
+
+    # Вернуться на страницу с кандидатами работодателя
+    return redirect('employer_candidates')
+
+@login_required
+@require_POST
+def change_job_status(request, job_id):
+    job_application = get_object_or_404(ResumeApplication, pk=job_id)
+    new_status = request.POST.get('new_status')
+
+    # Проверка, что new_status - это один из разрешенных вариантов
+    if new_status in ['Accepted', 'Rejected', 'Pending']:
+        job_application.status = new_status
+        job_application.save()
+
+    # Вернуться на страницу с кандидатами работодателя
+    return redirect('jobseeker_jobs')

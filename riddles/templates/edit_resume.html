@@ -1,0 +1,18 @@
+<!-- edit_resume.html -->
+{% extends "index.html" %}
+{% block title %}Редактирование резюме{% endblock title %}
+{% block header %}Редактирование резюме{% endblock header %}
+
+{% block content %}
+  <h2>Редактирование резюме</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="profession">Профессия:</label>
+    <input type="text" name="profession" value="{{ resume.profession }}">
+    <label for="skills">Навыки:</label>
+    <textarea name="skills">{{ resume.skills }}</textarea>
+    <label for="experience">Опыт работы:</label>
+    <textarea name="experience">{{ resume.experience }}</textarea>
+    <button type="submit">Сохранить</button>
+  </form>
+{% endblock content %}

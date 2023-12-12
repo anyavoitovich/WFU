@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+{% block title %}Удаление вакансии{% endblock title %}
+{% block header %}Удаление вакансии{% endblock header %}
+
+{% block content %}
+  <h2>Удаление вакансии</h2>
+  <p>Вы уверены, что хотите удалить вакансию "{{ vacancy.title }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Да, удалить</button>
+  </form>
+{% endblock content %}

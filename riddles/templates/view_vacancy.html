@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+{% block title %}Просмотр вакансии{% endblock title %}
+{% block header %}Просмотр вакансии{% endblock header %}
+
+{% block content %}
+  <h2>{{ vacancy.title }}</h2>
+  <p>{{ vacancy.description }}</p>
+  <p>Требования: {{ vacancy.requirements }}</p>
+  <p>Зарплата: {{ vacancy.salary }}</p>
+{% endblock content %}

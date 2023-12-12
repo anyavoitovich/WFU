@@ -1,0 +1,19 @@
+{% extends "index.html" %}
+{% block title %}Редактирование вакансии{% endblock title %}
+{% block header %}Редактирование вакансии{% endblock header %}
+
+{% block content %}
+  <h2>Редактирование вакансии</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="title">Название:</label>
+    <input type="text" name="title" value="{{ vacancy.title }}">
+    <label for="description">Описание:</label>
+    <textarea name="description">{{ vacancy.description }}</textarea>
+    <label for="requirements">Требования:</label>
+    <textarea name="requirements">{{ vacancy.requirements }}</textarea>
+    <label for="salary">Зарплата:</label>
+    <input type="text" name="salary" value="{{ vacancy.salary }}">
+    <button type="submit">Сохранить</button>
+  </form>
+{% endblock content %}

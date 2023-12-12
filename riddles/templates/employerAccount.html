@@ -6,6 +6,18 @@
 <p>Телефон: +12345677890</p>
 
 <p>Email: admin@admin.com</p>
-<a href="/add_vacancy" >add vacancy</a>
-
+  <a href="{% url 'add_vacancy' %}">Add Vacancy</a>
+  <a href="{% url 'employer_applications' %}">Мои заявки</a>
+  <a href="{% url 'employer_candidates' %}">Мои кандидаты</a>
+<h2>Мои вакансии</h2>
+<ul>
+    {% for vacancy in current_user.employer.vacancy_set.all %}
+        <li>
+            {{ vacancy.title }}
+            <a href="{% url 'view_vacancy' vacancy_id=vacancy.VacancyID %}">Просмотр</a>
+            <a href="{% url 'edit_vacancy' vacancy_id=vacancy.VacancyID %}">Редактировать</a>
+            <a href="{% url 'delete_vacancy' vacancy_id=vacancy.VacancyID %}">Удалить</a>
+        </li>
+    {% endfor %}
+</ul>
 {% endblock content %}

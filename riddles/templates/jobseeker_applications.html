@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% block title %}Мои заявки{% endblock title %}
+{% block header %}Мои заявки{% endblock header %}
+
+{% block content %}
+  <h2>Мои заявки</h2>
+  <ul>
+    {% for application in applications %}
+      <li>
+        <strong>{{ application.vacancy.title }}</strong>
+        <p>Status: {{ application.get_status_display }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock content %}

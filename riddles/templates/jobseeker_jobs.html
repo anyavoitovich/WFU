@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+{% block title %}Мои работы{% endblock title %}
+{% block header %}Мои работы{% endblock header %}
+
+{% block content %}
+  <h2>Мои работы</h2>
+  {% if job_applications %}
+    <ul>
+      {% for job_application in job_applications %}
+        <li>
+          <h3>{{ job_application.vacancy.title }}</h3>
+          <p>Company: {{ job_application.vacancy.employer.company_name }}</p>
+          <p>Status: {{ job_application.get_status_display }}</p>
+
+          <!-- Form for changing the status -->
+          <form method="post" action="{% url 'change_job_status' job_id=job_application.ApplicationID %}">
+            {% csrf_token %}
+            <select name="new_status">
+              <option value="Accepted">Принять</option>
+              <option value="Rejected">Отклонить</option>
+              <option value="Pending">В рассмотрении</option>
+            </select>
+            <button type="submit">Изменить статус</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>У вас нет предложенных вакансий.</p>
+  {% endif %}
+{% endblock content %}

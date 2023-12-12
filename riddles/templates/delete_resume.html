@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+{% block title %}Удаление резюме{% endblock title %}
+{% block header %}Удаление резюме{% endblock header %}
+
+{% block content %}
+  <h2>Удаление резюме</h2>
+  <p>Вы уверены, что хотите удалить резюме "{{ resume.profession }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Да, удалить</button>
+  </form>
+{% endblock content %}

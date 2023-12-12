@@ -7,12 +7,24 @@
 <p>Телефон: +12345677890</p>
 <p>Email: admin@admin.com</p>
 <a href="/add_resume" >add vacancy</a>
-<h2>Resumes</h2>
-            <ul>
-                {% for resume in resumes %}
-                   <li><a href="{% url 'resume_detail' resume.ResumeID%}">{{ resume.profession }}</a></li>
-                {% endfor %}
+<a href="{% url 'jobseeker_applications' %}">Мои заявки</a>
+<a href="{% url 'jobseeker_jobs' %}">Мои работы</a>
 
-            </ul>
+<h2>Мои резюме</h2>
+<ul>
+    {% for resume in current_user.jobseeker.resume_set.all %}
+        <li>
+            {{ resume.profession }}
+            <a href="{% url 'view_resume' resume_id=resume.ResumeID %}">Просмотр</a>
+            <a href="{% url 'edit_resume' resume_id=resume.ResumeID %}">Редактировать</a>
+            <a href="{% url 'delete_resume' resume_id=resume.ResumeID %}">Удалить</a>
+        </li>
+    {% endfor %}
+</ul>
+<h2>Заявки:</h2>
+{% for application in applications %}
+  <p>{{ application.sender.email }} - {{ application.get_status_display }}</p>
+{% endfor %}
+
 
 {% endblock content %}

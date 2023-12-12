@@ -14,10 +14,9 @@ class EmployerRegistrationForm(UserCreationForm):
 
 class JobSeekerRegistrationForm(UserCreationForm):
     birthdate = forms.DateField(required=True, widget=forms.TextInput(attrs={'type': 'date'}))
-    education = forms.CharField(widget=forms.Textarea, required=True)
-    experience = forms.CharField(widget=forms.Textarea, required=True)
+
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'birthdate', 'education', 'experience']
+        fields = ['first_name', 'last_name', 'email', 'password1', 'password2', 'role', 'birthdate']
         widgets = {'password1': forms.PasswordInput(), 'password2': forms.PasswordInput}

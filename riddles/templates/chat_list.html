@@ -1,0 +1,19 @@
+{% extends "index.html" %}
+{% block title %}Список чатов{% endblock title %}
+{% block header %}Список чатов{% endblock header %}
+
+{% block content %}
+    <ul>
+        {% for chat in user_chats %}
+            <li>
+                {% if chat.receiver %}
+                    <a href="{% url 'chat_view' other_user_id=chat.receiver %}">
+                        Пользователь {{ chat.receiver }} | Вакансия: {{ chat.vacancy__title }} | Непрочитанных сообщений: {{ chat.num_unread }}
+                    </a>
+                {% else %}
+                    Пустой отправитель чата
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

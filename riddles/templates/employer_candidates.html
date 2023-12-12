@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% block title %}Кандидаты{% endblock title %}
+{% block header %}Кандидаты{% endblock header %}
+
+{% block content %}
+  <h2>Кандидаты</h2>
+  <ul>
+    {% for candidate in candidates %}
+      <li>
+        <strong>{{ candidate.sender.first_name }} {{ candidate.sender.last_name }}</strong>
+        <p>Претендует на вакансию: {{ candidate.vacancy.title }}</p>
+        <p>Status: {{ candidate.get_status_display }}</p>
+
+         <form method="post" action="{% url 'change_candidate_status' candidate_id=candidate.ApplicationID %}">
+          {% csrf_token %}
+          <select name="new_status">
+            <option value="Accepted">Принять</option>
+            <option value="Rejected">Отклонить</option>
+            <option value="Pending">В рассмотрении</option>
+          </select>
+          <button type="submit">Изменить статус</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock content %}

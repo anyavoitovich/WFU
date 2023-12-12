@@ -58,6 +58,9 @@ class Vacancy(models.Model):
     requirements = models.TextField()
     salary = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def __str__(self):
+        return f"{self.title} - {self.employer.EmployerID.email}"
+
 class Resume(models.Model):
     ResumeID = models.AutoField(primary_key=True)
     job_seeker = models.ForeignKey(JobSeeker, on_delete=models.CASCADE)
@@ -85,6 +88,7 @@ class Message(models.Model):
     receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     text = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
 class EducationalInstitution(models.Model):
     EduInstitutionID = models.AutoField(primary_key=True)

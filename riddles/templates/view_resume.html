@@ -1,0 +1,9 @@
+{% extends "index.html" %}
+{% block title %}Просмотр резюме{% endblock title %}
+{% block header %}Просмотр резюме{% endblock header %}
+
+{% block content %}
+  <h2>{{ resume.profession }}</h2>
+  <p>Навыки: {{ resume.skills }}</p>
+  <p>Опыт работы: {{ resume.experience }}</p>
+{% endblock content %}

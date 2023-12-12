@@ -14,6 +14,14 @@
     <p>company description: {{ employer.company_description }}</p>
     <p>name: {{ employer.EmployerID.first_name }} {{ employer.EmployerID.last_name }}</p>
     <p>email: {{ employer.EmployerID.email }}</p>
-<a href="{% if employer.EmployerID.UserID %}{% url 'chat_view' other_user_id=employer.EmployerID.UserID %}{% else %}#{% endif %}" onclick="startChat(event, {% if employer.EmployerID.UserID %}{{ employer.EmployerID.UserID }}{% else %}null{% endif %});">Start Chat</a>
+    <a href="{% if employer.EmployerID.UserID %}{% url 'chat_view' other_user_id=employer.EmployerID.UserID %}{% else %}#{% endif %}" onclick="startChat(event, {% if employer.EmployerID.UserID %}{{ employer.EmployerID.UserID }}{% else %}null{% endif %});">Start Chat</a>
+<form method="post" action="{% url 'apply_vacancy' vacancy_id=vacancy.VacancyID %}">
+    {% csrf_token %}
+    <input type="submit" value="Подать заявку">
+</form>
 
-{% endblock content %}
+<h2>Заявки:</h2>
+{% for application in applications %}
+  <p>{{ application.sender.email }} - {{ application.get_status_display }}</p>
+{% endfor %}
+    {% endblock content %}
