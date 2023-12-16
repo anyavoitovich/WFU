@@ -3,7 +3,21 @@
 {% block header %}Удаление вакансии{% endblock header %}
 
 {% block content %}
-  <h2>Удаление вакансии</h2>
+<style>
+  button {
+        background-color: rgb(255, 193, 7);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #ffaa00;
+    }
+</style>
   <p>Вы уверены, что хотите удалить вакансию "{{ vacancy.title }}"?</p>
   <form method="post">
     {% csrf_token %}

@@ -1,8 +1,5 @@
-
-
 {% extends "index.html" %}
 {% block title %}User Registration{% endblock title %}
-{% block header %}User Registration{% endblock header %}
 
 {% block content %}
 
@@ -11,101 +8,159 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
 
-        .container {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 300px;
-            text-align: center;
-        }
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
+    nav {
+        background-color: rgb(255, 193, 7); /* Override the base template styles for the header */
+        padding: 10px;
+        text-align: center;
+        width: 100%;
+    }
 
-        button {
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    .container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+        text-align: center;
+        margin: 20px;
+    }
 
-        button:hover {
-            background-color: #45a049;
-        }
 
-        .container::before {
-            content: "";
-            display: block;
-            height: 150px; /* Adjust the height as needed */
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-    </style>
+    h2 {
+        color: rgb(255, 193, 7);
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: rgb(255, 193, 7);
+    }
+    .role {
+        display: flex;
+    }
+
+    .role label {
+        margin-right: 20px;  /* Добавим немного отступа между радиокнопками и текстом */
+    }
+
+    button {
+        background-color: rgb(255, 193, 7);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #ffaa00;
+    }
+
+    a {
+        text-decoration: none;
+        color: rgb(255, 193, 7);
+        /*display: block;*/
+        margin-top: 10px;
+    }
+
+    a:hover {
+        color: #ffaa00;
+    }
+
+    footer {
+        text-align: center;
+        margin-top: auto;
+        padding: 10px;
+        background-color: rgb(255, 193, 7);
+        color: #fff;
+        width: 100%;
+    }
+</style>
 </head>
-
 
 <div class="container">
     <h2>User Registration</h2>
     <form method="post" action="{% url 'register' %}">
         {% csrf_token %}
 
-        <label for="id_role">Role:</label>
-        <select name="role" id="id_role">
-            <option value="Employer">Employer</option>
-            <option value="JobSeeker">JobSeeker</option>
-        </select>
+        <div class="role">
+            <label>
+                <input type="radio" name="role" value="Employer" checked> Работодатель
+            </label>
 
-        <div id="employer-form" style="display: none;">
-            <label for="id_company_name">Company Name:</label>
-            <input type="text" name="company_name" id="id_company_name">
-            <label for="id_company_description">Company Description:</label>
-            <textarea name="company_description" id="id_company_description"></textarea>
+            <label>
+                <input type="radio" name="role" value="JobSeeker"> Соискатель
+            </label>
+        </div>
+<!--         <div id="employer-form">-->
+<!--            <input type="text" name="company_name" id="id_company_name" placeholder="Название компании" required>-->
+<!--            <input type="text" name="company_description" id="id_company_description" placeholder="Описание компании" required>-->
+<!--        </div>-->
+
+<!--        <div id="jobseeker-form" style="display: none;">-->
+<!--            <input type="text" name="birthdate" id="id_birthdate" placeholder="Дата рождения">-->
+<!--        </div>-->
+
+<!--        <input type="text" name="first_name" id="id_first_name" placeholder="Имя" required>-->
+<!--        <input type="text" name="last_name" id="id_last_name" placeholder="Фамилия" required>-->
+<!--        <input type="email" name="email" id="id_email" placeholder="Email" required>-->
+<!--        <input type="password" name="password1" id="id_password1" placeholder="Пароль" required>-->
+<!--        <input type="password" name="password2" id="id_password2" placeholder="Подтверждение пароля" required>-->
+
+<!--        <input type="submit" value="Register">-->
+<!--    </form>-->
+<!--</div>-->
+
+        <div id="employer-form">
+
+            <input type="text" name="company_name" id="id_company_name" placeholder="Название компании">
+
+            <input name="company_description" id="id_company_description" placeholder="Описание компании"></input>
         </div>
 
         <div id="jobseeker-form" style="display: none;">
-            <label for="id_birthdate">Birthdate:</label>
-            <input type="date" name="birthdate" id="id_birthdate">
 
+            <input type="date" name="birthdate" id="id_birthdate">
         </div>
 
-        <label for="id_first_name">First Name:</label>
-        <input type="text" name="first_name" id="id_first_name">
-        <label for="id_last_name">Last Name:</label>
-        <input type="text" name="last_name" id="id_last_name">
-        <label for="id_email">Email:</label>
-        <input type="email" name="email" id="id_email">
-        <label for="id_password1">Password:</label>
-        <input type="password" name="password1" id="id_password1">
-        <label for="id_password2">Confirm Password:</label>
-        <input type="password" name="password2" id="id_password2">
+
+        <input type="text" name="first_name" id="id_first_name" placeholder="Имя">
+        <input type="text" name="last_name" id="id_last_name" placeholder="Фамилия">
+        <input type="email" name="email" id="id_email"placeholder="Email">
+        <input type="password" name="password1" id="id_password1" placeholder="Пароль">
+        <input type="password" name="password2" id="id_password2" placeholder="Подтверждение пароля">
 
         <script>
-            const roleInput = document.getElementById('id_role');
+            const roleInputs = document.querySelectorAll('[name="role"]');
             const employerForm = document.getElementById('employer-form');
             const jobSeekerForm = document.getElementById('jobseeker-form');
 
-            roleInput.addEventListener('change', () => {
-                employerForm.style.display = roleInput.value === 'Employer' ? 'block' : 'none';
-                jobSeekerForm.style.display = roleInput.value === 'JobSeeker' ? 'block' : 'none';
+            roleInputs.forEach((roleInput) => {
+                roleInput.addEventListener('change', () => {
+                    employerForm.style.display = roleInput.value === 'Employer' ? 'block' : 'none';
+                    jobSeekerForm.style.display = roleInput.value === 'JobSeeker' ? 'block' : 'none';
+                });
             });
         </script>
 

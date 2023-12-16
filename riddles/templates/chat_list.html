@@ -3,13 +3,50 @@
 {% block header %}Список чатов{% endblock header %}
 
 {% block content %}
-    <ul>
+    <style>
+        /* Add your global CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            /* Add other global styles as needed */
+        }
+
+        .chat-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .chat-item {
+            margin-bottom: 10px;
+        }
+
+        .chat-link {
+            display: inline-block;
+            padding: 10px;
+            background-color: #3498db; /* Change to your preferred color */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .chat-link:hover {
+            background-color: #2980b9; /* Change to your preferred hover color */
+        }
+    </style>
+
+    <ul class="chat-list">
         {% for chat in user_chats %}
-            <li>
+            <li class="chat-item">
                 {% if chat.receiver %}
-                    <a href="{% url 'chat_view' other_user_id=chat.receiver %}">
-                        Пользователь {{ chat.receiver }} | Вакансия: {{ chat.vacancy__title }} | Непрочитанных сообщений: {{ chat.num_unread }}
-                    </a>
+                   {% if chat.receiver.is_employer %}
+                        <a class="chat-link" href="{% url 'chat_view' other_user_id=chat.receiver %}">
+                            Пользователь {{ chat.receiver}} | Непрочитанных сообщений: {{ chat.num_unread }}
+                        </a>
+                    {% else %}
+                        <a class="chat-link" href="{% url 'chat_view' other_user_id=chat.receiver %}">
+                            Пользователь {{ chat.receiver}}  | Непрочитанных сообщений: {{ chat.num_unread }}
+                        </a>
+                    {% endif %}
                 {% else %}
                     Пустой отправитель чата
                 {% endif %}

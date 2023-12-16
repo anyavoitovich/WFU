@@ -1,10 +1,54 @@
 {% extends "index.html" %}
 {% block title %}Просмотр вакансии{% endblock title %}
 {% block header %}Просмотр вакансии{% endblock header %}
-
 {% block content %}
-  <h2>{{ vacancy.title }}</h2>
-  <p>{{ vacancy.description }}</p>
-  <p>Требования: {{ vacancy.requirements }}</p>
-  <p>Зарплата: {{ vacancy.salary }}</p>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    header {
+      background-color: #3498db;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .vacancy-details {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: left;
+    }
+
+    h2 {
+      color: #3498db;
+    }
+
+    p {
+      color: #333;
+      line-height: 1.6;
+    }
+
+    strong {
+      color: #555;
+    }
+  </style>
+
+<body>
+
+  <div class="vacancy-details">
+    <h2>{{ vacancy.title }}</h2>
+    <p><strong>Описание:</strong> {{ vacancy.description }}</p>
+    <p><strong>Требования:</strong> {{ vacancy.requirements }}</p>
+    <p><strong>Зарплата:</strong> {{ vacancy.salary }}</p>
+  </div>
+</body>
 {% endblock content %}

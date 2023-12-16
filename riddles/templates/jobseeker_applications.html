@@ -1,9 +1,44 @@
 {% extends "index.html" %}
 {% block title %}Мои заявки{% endblock title %}
-{% block header %}Мои заявки{% endblock header %}
+{% block header %}Мои отклики на вакансии{% endblock header %}
 
 {% block content %}
-  <h2>Мои заявки</h2>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      color: rgb(255, 193, 7);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    strong {
+      color: rgb(255, 193, 7);
+    }
+
+    p {
+      margin: 8px 0;
+    }
+  </style>
+
   <ul>
     {% for application in applications %}
       <li>

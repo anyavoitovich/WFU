@@ -1,35 +1,105 @@
 {% extends "index.html" %}
-
-{% block title %}Resume Details{% endblock title %}
+{% block title %}User Registration{% endblock title %}
 
 {% block content %}
-  <h1>Resume Details</h1>
-  <p>Profession: {{ resume.profession }}</p>
-  <p>Skills: {{ resume.skills }}</p>
-  <p>Experience: {{ resume.experience }}</p>
-  <p>birthdate: {{ job_seeker.birthdate }}</p>
-  <p>education: {{ job_seeker.education }}</p>
-<!--  <p>experience: {{ job_seeker.education }}</p>-->
-  <p>name: {{ job_seeker.JobSeekerID.first_name }} {{ job_seeker.JobSeekerID.last_name }}</p>
-  <p>email: {{ job_seeker.JobSeekerID.email }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ vacancy.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: rgb(255, 193, 7);
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        strong {
+            color: rgb(255, 193, 7);
+        }
+
+        div.info-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #ffaa00;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 10px;
+            margin: 8px 0;
+            text-align: center;
+            text-decoration: none;
+            background-color: rgb(255, 193, 7);
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.button:hover {
+            background-color: #ffaa00;
+
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ resume.profession }}</h1>
+    <p><strong>Навыки:</strong> {{ resume.skills }}</p>
+    <p><strong>Опыт работы:</strong> {{ vacancy.requirements }}</p>
+    {% for edu_record in education %}
+      <p><strong>Университет:</strong> {{ edu_record.edu_institution.name }}</p>
+      <p><strong>Специальность:</strong> {{  edu_record.edu_institution.specialization }}</p>
+      <p><strong>Уровень образования:</strong> {{  edu_record.level }}</p>
+      <p><strong>Год выпуска:</strong> {{ edu_record.graduation_year }} }}</p>
+    {% endfor %}
+
+    <div class="info-box">
+        <p><strong>Имя и Фамилия:</strong> {{ job_seeker.JobSeekerID.first_name }} {{ job_seeker.JobSeekerID.last_name }}</p>
+        <p><strong>Дата роджения:</strong> {{ job_seeker.birthdate }}</p>
+        <p><strong>Email:</strong> {{ job_seeker.JobSeekerID.email }}</p>
+    </div>
+<br>
 
 
-  <h2>Educational Information</h2>
-  {% for edu_record in education %}
-    <p>Educational Institution: {{ edu_record.edu_institution.name }}</p>
-    <p>Level: {{ edu_record.level }}</p>
-    <p>Graduation Year: {{ edu_record.graduation_year }}</p>
-    <p>Specialization: {{ edu_record.edu_institution.specialization }}</p>
-    <hr>
-  {% endfor %}
-<a href="{% if job_seeker.JobSeekerID.UserID %}{% url 'chat_view' other_user_id=job_seeker.JobSeekerID.UserID %}{% else %}#{% endif %}" onclick="startChat(event, {% if job_seeker.JobSeekerID.UserID %}{{ job_seeker.JobSeekerID.UserID }}{% else %}null{% endif %});">Start Chat</a>
+
+
+
 
 <form method="post" action="{% url 'apply_resume' resume_id=resume.ResumeID %}">
     {% csrf_token %}
     <input type="submit" value="Подать заявку на резюме">
 </form>
-<h2>Заявки:</h2>
-{% for application in applications %}
-  <p>{{ application.sender.email }} - {{ application.get_status_display }}</p>
-{% endfor %}
+
+    <a class="button" href="{% if job_seeker.JobSeekerID.UserID %}{% url 'chat_view' other_user_id=job_seeker.JobSeekerID.UserID %}{% else %}#{% endif %}" onclick="startChat(event, {% if job_seeker.JobSeekerID.UserID %}{{ job_seeker.JobSeekerID.UserID }}{% else %}null{% endif %});">Start Chat</a>
+<!--<h2>Заявки:</h2>-->
+<!--{% for application in applications %}-->
+<!--  <p>{{ application.sender.email }} - {{ application.get_status_display }}</p>-->
+<!--{% endfor %}-->
+</body>
 {% endblock content %}

@@ -2,26 +2,94 @@
 {% block title %}User Registration{% endblock title %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ vacancy.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: rgb(255, 193, 7);
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        strong {
+            color: rgb(255, 193, 7);
+        }
+
+        div.info-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #ffaa00;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 10px;
+            margin: 8px 0;
+            text-align: center;
+            text-decoration: none;
+            background-color: rgb(255, 193, 7);
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.button:hover {
+            background-color: #ffaa00;
+
+        }
+    </style>
 </head>
 <body>
     <h1>{{ vacancy.title }}</h1>
-    <p>description:{{ vacancy.description }}</p>
-    <p>Requirements: {{ vacancy.requirements }}</p>
-    <p>Salary: {{ vacancy.salary }}</p>
-    <p>company name: {{ employer.company_name }}</p>
-    <p>company description: {{ employer.company_description }}</p>
-    <p>name: {{ employer.EmployerID.first_name }} {{ employer.EmployerID.last_name }}</p>
-    <p>email: {{ employer.EmployerID.email }}</p>
-    <a href="{% if employer.EmployerID.UserID %}{% url 'chat_view' other_user_id=employer.EmployerID.UserID %}{% else %}#{% endif %}" onclick="startChat(event, {% if employer.EmployerID.UserID %}{{ employer.EmployerID.UserID }}{% else %}null{% endif %});">Start Chat</a>
-<form method="post" action="{% url 'apply_vacancy' vacancy_id=vacancy.VacancyID %}">
-    {% csrf_token %}
-    <input type="submit" value="Подать заявку">
-</form>
+    <p><strong>Описание вакансии:</strong> {{ vacancy.description }}</p>
+    <p><strong>Требования:</strong> {{ vacancy.requirements }}</p>
+    <p><strong>Зарплата:</strong> {{ vacancy.salary }}</p>
 
-<h2>Заявки:</h2>
-{% for application in applications %}
-  <p>{{ application.sender.email }} - {{ application.get_status_display }}</p>
-{% endfor %}
-    {% endblock content %}
+    <div class="info-box">
+        <p><strong>Название компании:</strong> {{ employer.company_name }}</p>
+        <p><strong>Описание компании:</strong> {{ employer.company_description }}</p>
+        <p><strong>Работодатель:</strong> {{ employer.EmployerID.first_name }} {{ employer.EmployerID.last_name }}</p>
+        <p><strong>Email:</strong> {{ employer.EmployerID.email }}</p>
+    </div>
+<br>
+    <form method="post" action="{% url 'apply_vacancy' vacancy_id=vacancy.VacancyID %}">
+        {% csrf_token %}
+        <input type="submit" value="Подать заявку">
+    </form>
+
+    <a class="button" href="{% if employer.EmployerID.UserID %}{% url 'chat_view' other_user_id=employer.EmployerID.UserID %}{% else %}#{% endif %}" onclick="startChat(event, {% if employer.EmployerID.UserID %}{{ employer.EmployerID.UserID }}{% else %}null{% endif %});">Start Chat</a>
+
+    <!-- Your existing code for applications goes here -->
+
+</body>
+</html>
+{% endblock content %}

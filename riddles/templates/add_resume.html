@@ -15,6 +15,57 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
+         h2 {
+        color: rgb(255, 193, 7);
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: rgb(255, 193, 7);
+    }
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    textarea:focus {
+        border-color: rgb(255, 193, 7);
+    }
+
+    button {
+        background-color: rgb(255, 193, 7);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #ffaa00;
+    }
+
+    a {
+        text-decoration: none;
+        color: rgb(255, 193, 7);
+        /*display: block;*/
+        margin-top: 10px;
+    }
     </style>
   <h2>Add Resume</h2>
 
@@ -22,16 +73,25 @@
   <form method="post" action="{% url 'add_resume' %}">
     {% csrf_token %}
 
-    <label for="profession">profession:</label>
-    <input type="text" id="profession" name="profession" required>
+
+    <input type="text" id="profession" name="profession" placeholder="Профессия/Специализация" required>
     <br>
 
-    <label for="skills">skills:</label>
-    <textarea id="skills" name="skills" rows="4" required></textarea>
+    <textarea id="skills" name="skills" rows="4" placeholder="Навыки" required></textarea>
     <br>
 
-    <label for="experience">Requirements:</label>
-    <textarea id="experience" name="experience" rows="4" required></textarea>
+    <textarea id="experience" name="experience" rows="4" placeholder="Опыт работы" required></textarea>
+    <br>
+      <select id="edu_institution" name="edu_institution" required>
+        {% for institution in edu_institutions %}
+            <option value="{{ institution.EduInstitutionID }}">{{ institution.name }} - {{ institution.specialization }}</option>{% endfor %}
+      </select>
+    <br>
+
+    <input type="text" id="edu_level" name="edu_level" placeholder="Уровень образования" required>
+    <br>
+
+    <input type="number" id="graduation_year" name="graduation_year" placeholder="Год окончания" required>
     <br>
 
 

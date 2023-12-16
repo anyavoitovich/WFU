@@ -1,53 +1,87 @@
 {% extends "index.html" %}
 {% block title %}Вход{% endblock title %}
-{% block header %}Вход{% endblock header %}
+
 {% block content %}
 
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    }
 
-        .container {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 300px;
-            text-align: center;
-        }
+    nav {
+        background-color: rgb(255, 193, 7); /* Override the base template styles for the header */
+        padding: 10px;
+        text-align: center;
+        width: 100%;
+    }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
+    .container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+        text-align: center;
+        align-items: center;
+        margin: 20px;
+    }
 
-        button {
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+    h2 {
+        color: rgb(255, 193, 7);
+    }
 
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: rgb(255, 193, 7);
+    }
+
+    button {
+        background-color: rgb(255, 193, 7);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #ffaa00;
+    }
+
+    a {
+        text-decoration: none;
+        color: rgb(255, 193, 7);
+        /*display: block;*/
+        margin-top: 10px;
+    }
+
+    a:hover {
+        color: #ffaa00;
+    }
+
+
+</style>
 
 <div class="container">
-    <h2>Login</h2>
-    <form method="post" >
+    <h2>Вход</h2>
+    <form method="post">
         {% csrf_token %}
         <input type="email" name="email" placeholder="Email" required>
         <br>
@@ -56,6 +90,6 @@
         <button type="submit">Login</button>
     </form>
 
-    <a href="/register" >register</a>
+    <a href="/register">Register</a>
 </div>
 {% endblock content %}

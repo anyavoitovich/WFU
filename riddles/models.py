@@ -59,7 +59,8 @@ class Vacancy(models.Model):
     salary = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.title} - {self.employer.EmployerID.email}"
+        return f"{self.title} - {self.employer.EmployerID.email} - {self.employer.company_name} - {self.salary}"
+
 
 class Resume(models.Model):
     ResumeID = models.AutoField(primary_key=True)
@@ -73,8 +74,10 @@ class Resume(models.Model):
 class ResumeApplication(models.Model):
     ApplicationID = models.AutoField(primary_key=True)
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=[('Accepted', 'Принят'), ('Rejected', 'Отклонен'), ('Pending', 'В рассмотрении')])
+
 
 class VacancyApplication(models.Model):
     ApplicationID = models.AutoField(primary_key=True)

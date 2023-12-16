@@ -4,8 +4,80 @@
 {% block header %}Редактирование резюме{% endblock header %}
 
 {% block content %}
-  <h2>Редактирование резюме</h2>
-  <form method="post">
+    <style>
+        /* Стили для всплывающего окна предупреждения */
+        #warning-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+         h2 {
+        color: rgb(255, 193, 7);
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: rgb(255, 193, 7);
+    }
+    textarea {
+        width: 100%;
+        height: 100px;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    textarea:focus {
+        border-color: rgb(255, 193, 7);
+    }
+
+    button {
+        background-color: rgb(255, 193, 7);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #ffaa00;
+    }
+
+    a {
+        text-decoration: none;
+        color: rgb(255, 193, 7);
+        /*display: block;*/
+        margin-top: 10px;
+    }
+     label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+  </style>
+
+<form method="post">
     {% csrf_token %}
     <label for="profession">Профессия:</label>
     <input type="text" name="profession" value="{{ resume.profession }}">
@@ -13,6 +85,21 @@
     <textarea name="skills">{{ resume.skills }}</textarea>
     <label for="experience">Опыт работы:</label>
     <textarea name="experience">{{ resume.experience }}</textarea>
+
+  <!-- Добавленные поля для университета -->
+    <label for="edu_institution">Учебное учреждение:</label>
+    <select name="edu_institution">
+        {% for institution in edu_institutions %}
+            <option value="{{ institution.EduInstitutionID }}" {% if resume.education and resume.education.EduInstitutionID  == institution.id %}selected{% endif %}>{{ institution.name }} - {{ institution.specialization }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="edu_level">Уровень образования:</label>
+    <input type="text" name="edu_level" value="{% if resume.education %}{{ resume.education.level }}{% endif %}">
+
+    <label for="graduation_year">Год окончания:</label>
+    <input type="text" name="graduation_year" value="{% if resume.education %}{{ resume.education.graduation_year }}{% endif %}">
+
     <button type="submit">Сохранить</button>
-  </form>
+</form>
 {% endblock content %}

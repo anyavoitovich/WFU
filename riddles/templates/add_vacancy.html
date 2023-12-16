@@ -15,6 +15,57 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
+         h2 {
+        color: rgb(255, 193, 7);
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: rgb(255, 193, 7);
+    }
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    textarea:focus {
+        border-color: rgb(255, 193, 7);
+    }
+
+    button {
+        background-color: rgb(255, 193, 7);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #ffaa00;
+    }
+
+    a {
+        text-decoration: none;
+        color: rgb(255, 193, 7);
+        /*display: block;*/
+        margin-top: 10px;
+    }
     </style>
   <h2>Add Vacancy</h2>
 
@@ -22,20 +73,16 @@
   <form method="post" action="{% url 'add_vacancy' %}">
     {% csrf_token %}
 
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required>
+    <input type="text" id="title" name="title" placeholder="Наименование вакансии" required>
     <br>
 
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" rows="4" required></textarea>
+    <textarea id="description" name="description" rows="4" placeholder="Описание вакансии" required></textarea>
     <br>
 
-    <label for="requirements">Requirements:</label>
-    <textarea id="requirements" name="requirements" rows="4" required></textarea>
+    <textarea id="requirements" name="requirements" rows="4" placeholder="Требования к вакансии" required></textarea>
     <br>
 
-    <label for="salary">Salary:</label>
-    <input type="number" id="salary" name="salary" required>
+    <input type="number" id="salary" name="salary" placeholder="Зарплата" required>
     <br>
 
     <button type="submit" onclick="return validateForm()">Add Vacancy</button>

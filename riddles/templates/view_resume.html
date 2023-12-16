@@ -3,7 +3,58 @@
 {% block header %}Просмотр резюме{% endblock header %}
 
 {% block content %}
-  <h2>{{ resume.profession }}</h2>
-  <p>Навыки: {{ resume.skills }}</p>
-  <p>Опыт работы: {{ resume.experience }}</p>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  header {
+    background-color: #3498db;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .vacancy-details {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left;
+  }
+
+  h2 {
+    color: #3498db;
+  }
+
+  p {
+    color: #333;
+    line-height: 1.6;
+  }
+
+  strong {
+    color: #555;
+  }
+</style>
+<body>
+
+  <div class="vacancy-details">
+    <h2>{{ resume.profession }}</h2>
+    <p><strong>Навыки:</strong> {{ resume.skills }}</p>
+    <p><strong>Опыт работы:</strong> {{ resume.experience }}</p>
+    {% for edu_record in education %}
+      <p><strong>Университет:</strong> {{ edu_record.edu_institution.name }}</p>
+      <p><strong>Специальность:</strong> {{  edu_record.edu_institution.specialization }}</p>
+      <p><strong>Уровень образования:</strong> {{  edu_record.level }}</p>
+      <p><strong>Год выпуска:</strong> {{ edu_record.graduation_year }} </p>
+    {% endfor %}
+  </div>
+</body>
+
 {% endblock content %}

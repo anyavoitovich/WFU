@@ -1,23 +1,90 @@
 {% extends "index.html" %}
 {% block title %}Личный кабинет{% endblock title %}
-{% block header %}привет работодатель{% endblock header %}
+{% block header %}Привет, работодатель!{% endblock header %}
   
 {% block content %}
-<p>Телефон: +12345677890</p>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
 
-<p>Email: admin@admin.com</p>
-  <a href="{% url 'add_vacancy' %}">Add Vacancy</a>
-  <a href="{% url 'employer_applications' %}">Мои заявки</a>
-  <a href="{% url 'employer_candidates' %}">Мои кандидаты</a>
+    .dashboard-links {
+        margin-bottom: 20px;
+    }
+
+    .dashboard-links a {
+        display: inline-block;
+        margin-right: 20px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        padding: 10px 15px;
+        border: 1px solid #333;
+        border-radius: 5px;
+        transition: color 0.3s, border-color 0.3s;
+    }
+
+    .dashboard-links a:hover {
+        color: #fff;
+        background-color: #333;
+    }
+
+    .resume-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .resume-item {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+
+    .profession {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .resume-actions a {
+        margin-right: 10px;
+        text-decoration: none;
+        color: #666;
+        font-size: 14px;
+        transition: color 0.3s;
+    }
+
+    .resume-actions a:hover {
+        color: #f90;
+    }
+</style>
+
+
+<div class="dashboard-links">
+    <a href="{% url 'add_vacancy' %}">Добавить вакансию</a>
+    <a href="{% url 'employer_applications' %}">Мои отклики на резюме</a>
+    <a href="{% url 'employer_candidates' %}">Мои кандидаты на вакансии</a>
+</div>
+
 <h2>Мои вакансии</h2>
-<ul>
+<ul class="resume-list">
     {% for vacancy in current_user.employer.vacancy_set.all %}
-        <li>
-            {{ vacancy.title }}
-            <a href="{% url 'view_vacancy' vacancy_id=vacancy.VacancyID %}">Просмотр</a>
-            <a href="{% url 'edit_vacancy' vacancy_id=vacancy.VacancyID %}">Редактировать</a>
-            <a href="{% url 'delete_vacancy' vacancy_id=vacancy.VacancyID %}">Удалить</a>
+        <li class="resume-item">
+            <span class="profession">{{ vacancy.title }}</span>
+            <div class="resume-actions">
+                <a href="{% url 'view_vacancy' vacancy_id=vacancy.VacancyID %}">Просмотр</a>
+                <a href="{% url 'edit_vacancy' vacancy_id=vacancy.VacancyID %}">Редактировать</a>
+                <a href="{% url 'delete_vacancy' vacancy_id=vacancy.VacancyID %}">Удалить</a>
+            </div>
         </li>
     {% endfor %}
 </ul>
+</div>
 {% endblock content %}
+

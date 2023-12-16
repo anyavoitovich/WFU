@@ -1,13 +1,49 @@
 {% extends "index.html" %}
 {% block title %}Заявки на вакансии{% endblock title %}
-{% block header %}Заявки на вакансии{% endblock header %}
+{% block header %}Отклики на резюме{% endblock header %}
 
 {% block content %}
-  <h2>Заявки на вакансии</h2>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      color: rgb(255, 193, 7);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    strong {
+      color: rgb(255, 193, 7);
+    }
+
+    p {
+      margin: 8px 0;
+    }
+  </style>
+
+
   <ul>
     {% for application in applications %}
       <li>
-        <strong>{{ application.sender.first_name }} {{ application.sender.last_name }}</strong>
+        <strong>{{ application.resume.first_name }} {{ application.resume.last_name }}</strong>
         <p>Profession: {{ application.resume.profession }}</p>
         <p>Status: {{ application.get_status_display }}</p>
       </li>

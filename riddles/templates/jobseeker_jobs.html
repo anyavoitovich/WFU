@@ -1,29 +1,91 @@
 {% extends "index.html" %}
 {% block title %}Мои работы{% endblock title %}
-{% block header %}Мои работы{% endblock header %}
+{% block header %}Мои предложения о работе{% endblock header %}
 
 {% block content %}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+
+  h2 {
+    color: rgb(255, 193, 7);
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+  }
+
+  h3 {
+    color: rgb(255, 193, 7);
+  }
+
+  p {
+    margin: 8px 0;
+  }
+
+  form {
+    margin-top: 15px;
+  }
+
+  select, button {
+    padding: 8px;
+    margin-right: 10px;
+  }
+
+  button {
+    background-color: rgb(255, 193, 7);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #ff8800;
+  }
+</style>
+
   <h2>Мои работы</h2>
   {% if job_applications %}
     <ul>
-      {% for job_application in job_applications %}
-        <li>
-          <h3>{{ job_application.vacancy.title }}</h3>
-          <p>Company: {{ job_application.vacancy.employer.company_name }}</p>
-          <p>Status: {{ job_application.get_status_display }}</p>
+        {% for job_application in job_applications %}
+            <li>
+                <h3>{{ job_application.vacancy.title }}</h3>
+                <p>Company: {{ job_application.vacancy.employer.company_name }}</p>
+                <p>Salary: {{ job_application.vacancy.salary }}</p>
+                <p>Status: {{ job_application.get_status_display }}</p>
 
-          <!-- Form for changing the status -->
-          <form method="post" action="{% url 'change_job_status' job_id=job_application.ApplicationID %}">
-            {% csrf_token %}
-            <select name="new_status">
-              <option value="Accepted">Принять</option>
-              <option value="Rejected">Отклонить</option>
-              <option value="Pending">В рассмотрении</option>
-            </select>
-            <button type="submit">Изменить статус</button>
-          </form>
-        </li>
-      {% endfor %}
+                <!-- Form for changing the status -->
+                <form method="post" action="{% url 'change_job_status' job_id=job_application.ApplicationID %}">
+                    {% csrf_token %}
+                    <select name="new_status">
+                        <option value="Accepted">Accept</option>
+                        <option value="Rejected">Reject</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                    <button type="submit">Change Status</button>
+                </form>
+            </li>
+            {# Добавьте отладочные выводы #}
+            {{ job_application.vacancy.title }}
+            {{ job_application.vacancy.employer.company_name }}
+            {{ job_application.vacancy.salary }}
+        {% endfor %}
     </ul>
   {% else %}
     <p>У вас нет предложенных вакансий.</p>
